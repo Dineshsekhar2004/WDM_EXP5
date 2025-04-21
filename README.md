@@ -1,8 +1,6 @@
-\### EX:5 Information Retrieval Using Boolean Model in Python
-### DATE: 21/04/2025
-### NAME : DINESH S
-### AIM: 
-To implement Information Retrieval Using Boolean Model in Python.
+### EX5 Information Retrieval Using Boolean Model in Python
+### DATE: 21/04/25
+### AIM: To implement Information Retrieval Using Boolean Model in Python.
 ### Description:
 <div align = "justify">
 The Boolean model in Information Retrieval (IR) is a fundamental model used for searching and retrieving information from a collection of documents. It operates on the principles of set theory and logic, where documents are represented as sets of terms or words, and queries are expressed as Boolean expressions using logical operators such as AND, OR, and NOT.
@@ -25,12 +23,13 @@ The Boolean model in Information Retrieval (IR) is a fundamental model used for 
 
 ### Program:
 ```
-    import numpy as np
-    import pandas as pd
-    class BooleanRetrieval:
-        def __init__(self):
-            self.index = {}
-            self.documents_matrix = None
+import numpy as np
+import pandas as pd
+
+class BooleanRetrieval:
+    def __init__(self):
+        self.index = {}
+        self.documents_matrix = None
 
     def index_document(self, doc_id, text):
         terms = text.lower().split()
@@ -64,49 +63,27 @@ The Boolean model in Information Retrieval (IR) is a fundamental model used for 
         print(list(self.index.keys()))
 
     def boolean_search(self, query):
-        # Normalize query by converting to lowercase and split by logical operators
-        query = query.lower()
-        terms = query.split()
-        
-        # Initialize results with all documents
-        results = set(range(1, len(self.documents_matrix) + 1))
-        
-        # Process AND, OR, and NOT
-        operators = ['and', 'or', 'not']
-        
-        # Handle terms with operators
-        query_terms = []
-        query_operators = []
+        query_terms = query.lower().split()
+        results = None
 
-        for term in terms:
-            if term in operators:
-                query_operators.append(term)
+        for term in query_terms:
+            doc_ids = self.index.get(term, set())
+            if results is None:
+                results = doc_ids.copy()
             else:
-                query_terms.append(term)
-        
-        # Process query for 'AND' operation
-        if 'and' in query_operators:
-            for term in query_terms:
-                if term in self.index:
-                    results = results.intersection(self.index[term])
-        
-        # Process query for 'OR' operation
-        elif 'or' in query_operators:
-            for term in query_terms:
-                if term in self.index:
-                    results = results.union(self.index[term])
-        
-        # Process query for 'NOT' operation
-        elif 'not' in query_operators:
-            for term in query_terms:
-                if term in self.index:
-                    results = results.difference(self.index[term])
-        
-        return results
+                if term.startswith('not'):
+                    results.difference_update(doc_ids)
+                elif term == 'or':
+                    results.update(doc_ids)
+                elif term == 'and':
+                    results.intersection_update(doc_ids)
+
+        return list(results) if results else []
 
 if __name__ == "__main__":
     indexer = BooleanRetrieval()
 
+   
     documents = {
         1: "Python is a programming language",
         2: "Information retrieval deals with finding information",
@@ -116,21 +93,41 @@ if __name__ == "__main__":
     for doc_id, text in documents.items():
         indexer.index_document(doc_id, text)
 
+    
     indexer.create_documents_matrix(documents)
     indexer.print_documents_matrix_table()
+
+
     indexer.print_all_terms()
 
-    query = input("Enter your boolean query: ")
-    results = indexer.boolean_search(query)
+
+    query1 = input("Enter your boolean query: ")
+    results = indexer.boolean_search(query1)
     if results:
-        print(f"Results for '{query}': {results}")
+        print(f"Results for '{query1}': {results}")
     else:
         print("No results found for the query.")
 
 ```
 ### Output:
+```
+Document - 1 ['python', 'is', 'a', 'programming', 'language']
+Document - 2 ['information', 'retrieval', 'deals', 'with', 'finding', 'information']
+Document - 3 ['boolean', 'models', 'are', 'used', 'in', 'information', 'retrieval']
+   python  is  a  programming  language  information  retrieval  deals  with  \
+0       1   1  1            1         1            0          0      0     0   
+1       0   0  0            0         0            1          1      1     1   
+2       0   0  0            0         0            1          1      0     0   
 
-![image](https://github.com/user-attachments/assets/acb71ac0-e40d-4fe7-9624-4a3b21e3e7ed)
-
+   finding  boolean  models  are  used  in  
+0        0        0       0    0     0   0  
+1        1        0       0    0     0   0  
+2        0        1       1    1     1   1  
+All terms in the documents:
+['python', 'is', 'a', 'programming', 'language', 'information', 'retrieval', 'deals', 'with', 'finding', 'boolean', 'models', 'are', 'used', 'in']
+Enter your boolean query: not, python
+No results found for the query.
+```
 ### Result:
-Implementation of Information Retrieval using Boolean Model in Python is successfully completed.
+Implementation of Information Retrieval Using Boolean Model in Python is successfully completed.
+
