@@ -15,7 +15,7 @@ The Boolean model in Information Retrieval (IR) is a fundamental model used for 
     <p> b) Tokenize the text content of documents, converting them into lowercase terms.
     <p> c) For each term in the document, it adds an entry in the index, associating the term with the document ID. </p>
 4. ***Fetch Web Page Text:***
-    <p>a) The fetch_webpage_text method uses the requests library to fetch content from a given URL.
+    <p>a) The fetch_webpage_text method uses the requests library to fetch content from a given URL
     <p>b) Extract text content from the fetched HTML using BeautifulSoup.
     <p>c) The extracted text is returned for further processing.
 5. ***Boolean Search:***
